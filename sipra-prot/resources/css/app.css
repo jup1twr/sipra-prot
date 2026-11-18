@@ -9,7 +9,15 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    /* Fontes do SIPRA */
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-titulo: 'Montserrat', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+    /* Cores do SIPRA */
+    --color-sipra-verde: #078c61;
+    --color-sipra-verde-escuro: #066d4c;
+    --color-sipra-azul: #0e304e;
+    --color-sipra-fundo: #F5F7FA;
 
     --color-zinc-50: #fafafa;
     --color-zinc-100: #f5f5f5;
@@ -23,16 +31,17 @@
     --color-zinc-900: #171717;
     --color-zinc-950: #0a0a0a;
 
-    --color-accent: var(--color-neutral-800);
-    --color-accent-content: var(--color-neutral-800);
-    --color-accent-foreground: var(--color-white);
+    /* Cor de destaque (botões principais): verde do SIPRA */
+    --color-accent: #078c61;
+    --color-accent-content: #066d4c;
+    --color-accent-foreground: #ffffff;
 }
 
 @layer theme {
     .dark {
-        --color-accent: var(--color-white);
-        --color-accent-content: var(--color-white);
-        --color-accent-foreground: var(--color-neutral-800);
+        --color-accent: #078c61;
+        --color-accent-content: #3ccf9f;
+        --color-accent-foreground: #ffffff;
     }
 }
 
