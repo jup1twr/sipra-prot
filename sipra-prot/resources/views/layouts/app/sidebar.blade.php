@@ -20,7 +20,7 @@
                         Meus Projetos
                     </flux:sidebar.item>
 
-                    <flux:sidebar.item icon="users" href="#">
+                    <flux:sidebar.item icon="users" :href="route('clientes.index')" :current="request()->routeIs('clientes.*')" wire:navigate class="data-current:bg-sipra-verde! data-current:text-white!">
                         Clientes
                     </flux:sidebar.item>
 
