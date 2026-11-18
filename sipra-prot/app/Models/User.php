@@ -59,4 +59,18 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
             ? Str::substr($initials, 0, 1).Str::substr($initials, -1)
             : $initials;
     }
+
+        protected static function booted(): void
+    {
+        static::creating(function (User $user) {
+            if (! $user->empresa_id) {
+                $user->empresa_id = Empresa::query()->orderBy('id')->value('id');
+            }
+        });
+    }
+
+    public function empresa(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Empresa::class);
+    }
 }
