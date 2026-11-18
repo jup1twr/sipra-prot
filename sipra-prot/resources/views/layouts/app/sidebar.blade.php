@@ -16,7 +16,7 @@
 
             <flux:sidebar.nav>
                 <flux:sidebar.group heading="Menu" class="grid">
-                    <flux:sidebar.item icon="folder" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate class="data-current:bg-sipra-verde! data-current:text-white!">
+                    <flux:sidebar.item icon="folder" :href="route('dashboard')" :current="request()->routeIs('dashboard', 'projetos.*')" wire:navigate class="data-current:bg-sipra-verde! data-current:text-white!">
                         Meus Projetos
                     </flux:sidebar.item>
 
@@ -88,3 +88,21 @@
                             data-test="logout-button"
                         >
                             Sair
+
+                                                    </flux:menu.item>
+                    </form>
+                </flux:menu>
+            </flux:dropdown>
+        </flux:header>
+
+        {{ $slot }}
+
+        @persist('toast')
+            <flux:toast.group>
+                <flux:toast />
+            </flux:toast.group>
+        @endpersist
+
+        @fluxScripts
+    </body>
+</html>
