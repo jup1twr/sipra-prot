@@ -39,6 +39,17 @@
 
     <flux:input name="prazo" type="date" label="Prazo" :value="old('prazo', $projeto->prazo?->format('Y-m-d'))" />
 
+    <flux:field>
+        <flux:label>Tipologia</flux:label>
+        <select name="tipologia" class="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-900">
+            <option value="">Não definida</option>
+            @foreach (\App\Enums\Tipologia::cases() as $t)
+                <option value="{{ $t->value }}" @selected(old('tipologia', $projeto->tipologia?->value) === $t->value)>{{ $t->rotulo() }}</option>
+            @endforeach
+        </select>
+        <flux:error name="tipologia" />
+    </flux:field>
+
     <flux:field class="md:col-span-2">
         <flux:label>Briefing</flux:label>
         <textarea name="briefing" rows="4" class="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-900">{{ old('briefing', $projeto->briefing) }}</textarea>

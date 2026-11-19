@@ -16,13 +16,14 @@ class ProjetoRequest extends FormRequest
     public function rules(): array
     {
         $empresa = $this->user()->empresa_id;
-
+        
         return [
             'nome' => ['required', 'string', 'max:255'],
             'cliente_id' => ['required', Rule::exists('clientes', 'id')
                 ->where('empresa_id', $empresa)->whereNull('deleted_at')],
             'responsavel_id' => ['nullable', Rule::exists('users', 'id')->where('empresa_id', $empresa)],
             'status' => ['required', Rule::enum(StatusProjeto::class)],
+            'tipologia' => ['nullable', \Illuminate\Validation\Rule::enum(\App\Enums\Tipologia::class)],
             'prazo' => ['nullable', 'date'],
             'briefing' => ['nullable', 'string', 'max:5000'],
         ];

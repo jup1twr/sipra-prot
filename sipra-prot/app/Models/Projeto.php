@@ -7,17 +7,19 @@ use App\Models\Concerns\PertenceAEmpresa;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Enums\Tipologia;
 
 class Projeto extends Model
 {
     use PertenceAEmpresa, SoftDeletes;
 
-    protected $fillable = ['cliente_id', 'responsavel_id', 'nome', 'status', 'prazo', 'briefing'];
+    protected $fillable = ['cliente_id', 'responsavel_id', 'nome', 'status', 'tipologia', 'prazo', 'briefing'];
 
     protected function casts(): array
     {
         return [
             'status' => StatusProjeto::class,
+            'tipologia' => Tipologia::class,
             'prazo' => 'date',
         ];
     }
