@@ -28,9 +28,17 @@
                         Propostas
                     </flux:sidebar.item>
 
-                    <flux:sidebar.item icon="chart-bar" :href="route('relatorios.index')" :current="request()->routeIs('relatorios.*')" wire:navigate class="data-current:bg-sipra-verde! data-current:text-white!">
-                        Relatórios
-                    </flux:sidebar.item>
+                    @can('relatorios')
+                        <flux:sidebar.item icon="chart-bar" :href="route('relatorios.index')" :current="request()->routeIs('relatorios.*')" wire:navigate class="data-current:bg-sipra-verde! data-current:text-white!">
+                            Relatórios
+                        </flux:sidebar.item>
+                    @endcan
+
+                    @can('usuarios')
+                        <flux:sidebar.item icon="user-group" :href="route('usuarios.index')" :current="request()->routeIs('usuarios.*')" wire:navigate class="data-current:bg-sipra-verde! data-current:text-white!">
+                            Usuários
+                        </flux:sidebar.item>
+                    @endcan
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 

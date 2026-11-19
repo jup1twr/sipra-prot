@@ -12,7 +12,7 @@ use App\Http\Controllers\RelatorioController;
 
 Route::view('/', 'welcome')->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', \App\Http\Middleware\UsuarioAtivo::class])->group(function () {
     // "Meus Projetos" é a tela inicial depois do login
     Route::get('propostas', [PropostaController::class, 'index'])->name('propostas.index');
     Route::post('projetos/{projeto}/propostas', [PropostaController::class, 'store'])->name('projetos.propostas.store');
@@ -33,7 +33,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('projetos/{projeto}/anexos', [AnexoController::class, 'store'])->name('projetos.anexos.store');
     Route::get('anexos/{anexo}', [AnexoController::class, 'show'])->name('anexos.show');
     Route::delete('anexos/{anexo}', [AnexoController::class, 'destroy'])->name('anexos.destroy');
-    Route::get('relatorios', [\App\Http\Controllers\RelatorioController::class, 'index'])->name('relatorios.index');
+    Route::get('relatorios', [\App\Http\Controllers\RelatorioController::class, 'index'])
+        ->middleware('can:relatorios')
+        ->name('relatorios.index');
+    Route::resource('usuarios', \App\Http\Controllers\UserController::class)
+        ->except(['show', 'destroy'])
+        ->middleware('can:usuarios');
 
     Route::resource('clientes', ClienteController::class)->except('show');
 });
