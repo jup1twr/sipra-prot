@@ -14,24 +14,28 @@ class ProjetoController extends Controller
     public function index(Request $request)
     {
         $busca = trim((string) $request->input('busca'));
-        $status = StatusProjeto::tryFrom((string) $request->input('status'));
+        $visao = $request->input('visao') === 'kanban' ? 'kanban' : 'lista';
+        $status = $visao === 'lista' ? StatusProjeto::tryFrom((string) $request->input('status')) : null;
 
-        $projetos = Projeto::query()
+        $consulta = Projeto::query()
             ->with(['cliente', 'responsavel'])
             ->when($busca !== '', fn ($q) => $q->where(fn ($w) => $w
                 ->where('nome', 'like', "%{$busca}%")
                 ->orWhereHas('cliente', fn ($c) => $c->where('nome', 'like', "%{$busca}%"))))
             ->when($status, fn ($q) => $q->where('status', $status->value))
-            ->orderByRaw('prazo is null, prazo')
-            ->paginate(15)
-            ->withQueryString();
+            ->orderByRaw('prazo is null, prazo');
+
+        $projetos = $visao === 'lista' ? $consulta->paginate(15)->withQueryString() : null;
+        $colunas = $visao === 'kanban'
+            ? $consulta->limit(300)->get()->groupBy(fn ($p) => $p->status->value)
+            : collect();
 
         $contagens = Projeto::query()
             ->selectRaw('status, count(*) as total')
             ->groupBy('status')
             ->pluck('total', 'status');
 
-        return view('projetos.index', compact('projetos', 'busca', 'status', 'contagens'));
+        return view('projetos.index', compact('projetos', 'busca', 'status', 'contagens', 'visao', 'colunas'));
     }
 
     public function create(Request $request)
@@ -99,6 +103,17 @@ class ProjetoController extends Controller
 
         return view('projetos.aba-provisoria', compact('projeto', 'titulo'));
     }   
+
+    public function mudarStatus(Request $request, Projeto $projeto)
+    {
+        $dados = $request->validate([
+            'status' => ['required', \Illuminate\Validation\Rule::enum(StatusProjeto::class)],
+        ]);
+
+        $projeto->update(['status' => $dados['status']]);
+
+        return response()->json(['ok' => true, 'status' => $projeto->status->value]);
+    }
 
     private function opcoes(): array
     {
