@@ -36,6 +36,9 @@ Route::middleware(['auth', 'verified', \App\Http\Middleware\UsuarioAtivo::class]
     Route::get('relatorios', [\App\Http\Controllers\RelatorioController::class, 'index'])
         ->middleware('can:relatorios')
         ->name('relatorios.index');
+    Route::get('relatorios/exportar/{tipo}', [\App\Http\Controllers\ExportacaoRelatorioController::class, 'exportar'])
+        ->middleware('can:relatorios')
+        ->name('relatorios.exportar');
     Route::resource('usuarios', \App\Http\Controllers\UserController::class)
         ->except(['show', 'destroy'])
         ->middleware('can:usuarios');

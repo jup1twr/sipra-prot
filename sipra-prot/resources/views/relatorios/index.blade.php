@@ -24,10 +24,10 @@
     ];
 
     $relatorios = [
-        ['Orçamentos por período', 'Valores, BDI e status por revisão', 'PDF'],
-        ['Produtividade por responsável', 'Projetos e prazos por integrante', 'XLSX'],
-        ['Quantitativos por projeto', 'Áreas e volumes validados no levantamento', 'PDF'],
-        ['Consumo de insumos', 'Itens mais utilizados e variação de preço', 'XLSX'],
+        ['orcamentos', 'Orçamentos por período', 'Valores e status das propostas emitidas', 'PDF', true],
+        ['produtividade', 'Produtividade por responsável', 'Projetos, prazos e propostas por integrante', 'XLSX', true],
+        ['quantitativos', 'Quantitativos por projeto', 'Áreas e volumes validados no levantamento', 'PDF', false],
+        ['insumos', 'Consumo de insumos', 'Itens mais utilizados e variação de preço', 'XLSX', false],
     ];
 
     $selectClasse = 'rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-900';
@@ -41,7 +41,7 @@
                 <p class="text-sm text-zinc-500">Visão geral de projetos e propostas da sua empresa.</p>
             </div>
 
-            <flux:button variant="primary" icon="arrow-down-tray" disabled title="Em breve">Exportar PDF</flux:button>
+            <flux:button variant="primary" icon="arrow-down-tray" :href="route('relatorios.exportar', ['tipo' => 'resumo'] + $parametros)">Exportar PDF</flux:button>    
         </div>
 
         <form method="GET" class="flex flex-wrap items-center gap-3">
@@ -157,14 +157,18 @@
         <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
             <h2 class="font-titulo p-5 pb-3 font-semibold text-sipra-azul dark:text-white">Relatórios disponíveis</h2>
             <div class="divide-y divide-zinc-200 border-t border-zinc-200 dark:divide-zinc-700 dark:border-zinc-700">
-                @foreach ($relatorios as [$nome, $descricao, $formato])
+                @foreach ($relatorios as [$slug, $nome, $descricao, $formato, $pronto])
                     <div class="flex flex-wrap items-center gap-4 px-5 py-3">
                         <div class="min-w-48 flex-1">
                             <div class="text-sm font-semibold text-sipra-azul dark:text-white">{{ $nome }}</div>
                             <div class="text-xs text-zinc-500">{{ $descricao }}</div>
                         </div>
                         <span class="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-semibold text-zinc-500 dark:bg-zinc-800">{{ $formato }}</span>
-                        <flux:button size="sm" disabled title="Em breve">Exportar</flux:button>
+                        @if ($pronto)
+                            <flux:button size="sm" :href="route('relatorios.exportar', ['tipo' => $slug] + $parametros)">Exportar</flux:button>
+                        @else
+                            <flux:button size="sm" disabled title="Em breve">Exportar</flux:button>
+                        @endif
                     </div>
                 @endforeach
             </div>
