@@ -31,4 +31,9 @@ class Projeto extends Model
     {
         return $this->belongsTo(User::class, 'responsavel_id');
     }
+    
+    public function anexos(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Anexo::class)->latest();
+    }
 }

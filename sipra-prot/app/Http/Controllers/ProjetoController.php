@@ -73,7 +73,7 @@ class ProjetoController extends Controller
 
     public function show(Projeto $projeto)
     {
-        $projeto->load(['cliente', 'responsavel']);
+        $projeto->load(['cliente', 'responsavel', 'anexos.autor']);
 
         return view('projetos.show', compact('projeto'));
     }
