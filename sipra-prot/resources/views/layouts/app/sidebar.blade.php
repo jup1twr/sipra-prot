@@ -24,7 +24,7 @@
                         Clientes
                     </flux:sidebar.item>
 
-                    <flux:sidebar.item icon="document-text" href="#">
+                    <flux:sidebar.item icon="document-text" :href="route('propostas.index')" :current="request()->routeIs('propostas.*')" wire:navigate class="data-current:bg-sipra-verde! data-current:text-white!">
                         Propostas
                     </flux:sidebar.item>
 

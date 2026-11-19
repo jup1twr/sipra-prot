@@ -56,6 +56,10 @@
                 @csrf
             </form>
 
+            <form id="form-proposta" method="POST" action="{{ route('projetos.propostas.store', $projeto) }}">
+                @csrf
+            </form>
+
             <form method="POST" action="{{ route('orcamentos.atualizar', $orcamento) }}"
                   x-data="orcamento(@js($itensJs), @js((float) $orcamento->perdas_percentual), @js((float) $orcamento->bdi_percentual))"
                   class="grid gap-6 lg:grid-cols-3 lg:items-start">
@@ -172,7 +176,16 @@
 
                         <div class="mt-5 flex flex-col gap-2">
                             <flux:button variant="primary" type="submit" class="w-full">Salvar orçamento</flux:button>
-                            <flux:button type="button" disabled title="Disponível no próximo módulo" class="w-full">Gerar Proposta em PDF</flux:button>
+                            <div class="mt-2 border-t border-dashed border-zinc-200 pt-4 dark:border-zinc-700">
+                                <label for="validade_dias" class="mb-1.5 block text-xs font-medium uppercase tracking-wide text-zinc-500">Validade da proposta (dias)</label>
+                                <input id="validade_dias" form="form-proposta" type="number" name="validade_dias" value="15" min="1" max="180" required
+                                    class="mb-3 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm tabular-nums focus:border-sipra-verde focus:outline-none focus:ring-2 focus:ring-sipra-verde/30 dark:border-zinc-600 dark:bg-zinc-900">
+                                <button type="submit" form="form-proposta"
+                                        class="w-full rounded-lg border border-sipra-azul bg-white px-3 py-2 text-sm font-medium text-sipra-azul hover:bg-sipra-azul hover:text-white">
+                                    Gerar proposta em PDF
+                                </button>
+                                <p class="mt-2 text-xs text-zinc-500">A proposta usa o orçamento <strong>salvo</strong>. Salve antes de gerar.</p>
+                            </div>
                         </div>
 
                         <p class="mt-3 text-center text-xs text-zinc-500">As alterações só são gravadas ao clicar em "Salvar orçamento".</p>

@@ -7,11 +7,17 @@ use App\Http\Controllers\AnexoController;
 use App\Http\Controllers\AmbienteController;
 use App\Http\Controllers\LevantamentoController;
 use App\Http\Controllers\OrcamentoController;
+use App\Http\Controllers\PropostaController;
 
 Route::view('/', 'welcome')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // "Meus Projetos" é a tela inicial depois do login
+    Route::get('propostas', [PropostaController::class, 'index'])->name('propostas.index');
+    Route::post('projetos/{projeto}/propostas', [PropostaController::class, 'store'])->name('projetos.propostas.store');
+    Route::get('propostas/{proposta}/pdf', [PropostaController::class, 'pdf'])->name('propostas.pdf');
+    Route::patch('propostas/{proposta}/status', [PropostaController::class, 'mudarStatus'])->name('propostas.status');
+    Route::delete('propostas/{proposta}', [PropostaController::class, 'destroy'])->name('propostas.destroy');
     Route::get('dashboard', [ProjetoController::class, 'index'])->name('dashboard');
     Route::resource('projetos', ProjetoController::class)->except('index');
     Route::patch('projetos/{projeto}/status', [ProjetoController::class, 'mudarStatus'])->name('projetos.status');
