@@ -8,6 +8,7 @@ use App\Http\Controllers\AmbienteController;
 use App\Http\Controllers\LevantamentoController;
 use App\Http\Controllers\OrcamentoController;
 use App\Http\Controllers\PropostaController;
+use App\Http\Controllers\RelatorioController;
 
 Route::view('/', 'welcome')->name('home');
 
@@ -32,6 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('projetos/{projeto}/anexos', [AnexoController::class, 'store'])->name('projetos.anexos.store');
     Route::get('anexos/{anexo}', [AnexoController::class, 'show'])->name('anexos.show');
     Route::delete('anexos/{anexo}', [AnexoController::class, 'destroy'])->name('anexos.destroy');
+    Route::get('relatorios', [\App\Http\Controllers\RelatorioController::class, 'index'])->name('relatorios.index');
 
     Route::resource('clientes', ClienteController::class)->except('show');
 });
