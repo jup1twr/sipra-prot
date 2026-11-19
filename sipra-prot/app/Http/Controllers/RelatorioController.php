@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Enums\Tipologia;
 
 class RelatorioController extends Controller
 {
@@ -24,6 +25,7 @@ class RelatorioController extends Controller
         $periodo = $request->string('periodo')->toString();
         $periodo = isset(self::PERIODOS[$periodo]) ? $periodo : '6m';
         $responsavelId = $request->integer('responsavel') ?: null;
+        $tipologia = Tipologia::tryFrom($request->string('tipologia')->toString())?->value;
 
         $inicio = match ($periodo) {
             '3m'    => now()->startOfMonth()->subMonths(2),
@@ -34,11 +36,12 @@ class RelatorioController extends Controller
         };
 
         // Propostas da empresa (sem excluídas), com o filtro de responsável
-        $base = fn () => DB::table('propostas')
+       $base = fn () => DB::table('propostas')
             ->join('projetos', 'projetos.id', '=', 'propostas.projeto_id')
             ->where('propostas.empresa_id', $empresaId)
             ->whereNull('propostas.deleted_at')
-            ->when($responsavelId, fn ($q) => $q->where('projetos.responsavel_id', $responsavelId));
+            ->when($responsavelId, fn ($q) => $q->where('projetos.responsavel_id', $responsavelId))
+            ->when($tipologia, fn ($q) => $q->where('projetos.tipologia', $tipologia));
 
         // Mesmas propostas, já dentro do período escolhido
         $propostas = fn () => $base()
@@ -55,7 +58,8 @@ class RelatorioController extends Controller
         $projetos = fn () => DB::table('projetos')
             ->where('empresa_id', $empresaId)
             ->whereNull('deleted_at')
-            ->when($responsavelId, fn ($q) => $q->where('responsavel_id', $responsavelId));
+            ->when($responsavelId, fn ($q) => $q->where('responsavel_id', $responsavelId))
+            ->when($tipologia, fn ($q) => $q->where('tipologia', $tipologia));
 
         $projetosAtivos = $projetos()->where('status', '!=', 'aprovado')->count();
         $projetosNovos = $projetos()
@@ -116,9 +120,11 @@ class RelatorioController extends Controller
 
         $periodos = self::PERIODOS;
         $periodoRotulo = self::PERIODOS[$periodo];
+        $tipologias = Tipologia::opcoes();
 
         return view('relatorios.index', compact(
             'periodo', 'periodos', 'periodoRotulo', 'responsavelId', 'responsaveis',
+            'tipologia', 'tipologias',
             'quantidade', 'valorTotal', 'nAprovadas', 'decididas', 'taxaAprovacao',
             'projetosAtivos', 'projetosNovos',
             'porStatus', 'serieMeses', 'topClientes', 'projetosPorStatus'

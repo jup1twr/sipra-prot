@@ -58,7 +58,14 @@
                 @endforeach
             </select>
 
-            @if ($periodo !== '6m' || $responsavelId)
+            <select name="tipologia" onchange="this.form.submit()" class="{{ $selectClasse }}">
+                <option value="">Tipologia: Todas</option>
+                @foreach ($tipologias as $chave => $rotulo)
+                    <option value="{{ $chave }}" @selected($tipologia === $chave)>Tipologia: {{ $rotulo }}</option>
+                @endforeach
+            </select>
+
+            @if ($periodo !== '6m' || $responsavelId || $tipologia)
                 <flux:button variant="ghost" size="sm" :href="route('relatorios.index')">Limpar filtros</flux:button>
             @endif
         </form>
