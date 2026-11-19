@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AnexoController;
 use App\Http\Controllers\AmbienteController;
 use App\Http\Controllers\LevantamentoController;
+use App\Http\Controllers\OrcamentoController;
 
 Route::view('/', 'welcome')->name('home');
 
@@ -18,7 +19,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('projetos/{projeto}/ambientes', [AmbienteController::class, 'store'])->name('projetos.ambientes.store');
     Route::delete('ambientes/{ambiente}', [AmbienteController::class, 'destroy'])->name('ambientes.destroy');
     Route::put('ambientes/{ambiente}/itens', [LevantamentoController::class, 'salvar'])->name('ambientes.itens.salvar');
-    Route::get('projetos/{projeto}/orcamento', [ProjetoController::class, 'orcamento'])->name('projetos.orcamento');
+    Route::get('projetos/{projeto}/orcamento', [OrcamentoController::class, 'show'])->name('projetos.orcamento');
+    Route::post('projetos/{projeto}/orcamento', [OrcamentoController::class, 'gerar'])->name('projetos.orcamento.gerar');
+    Route::put('orcamentos/{orcamento}', [OrcamentoController::class, 'atualizar'])->name('orcamentos.atualizar');
     Route::get('projetos/{projeto}/historico', [ProjetoController::class, 'historico'])->name('projetos.historico');
     Route::post('projetos/{projeto}/anexos', [AnexoController::class, 'store'])->name('projetos.anexos.store');
     Route::get('anexos/{anexo}', [AnexoController::class, 'show'])->name('anexos.show');

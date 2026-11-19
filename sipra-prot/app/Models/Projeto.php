@@ -41,4 +41,9 @@ class Projeto extends Model
     {
         return $this->hasMany(Ambiente::class)->orderBy('ordem')->orderBy('id');
     }
+
+    public function orcamento(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Orcamento::class);
+    }
 }
