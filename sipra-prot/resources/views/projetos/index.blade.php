@@ -60,7 +60,8 @@
                             $atrasado = $projeto->prazo && $projeto->prazo->isPast() && $projeto->status !== \App\Enums\StatusProjeto::Aprovado;
                         @endphp
                         <tr>
-                            <td class="px-4 py-3 font-medium text-sipra-azul dark:text-white">{{ $projeto->nome }}</td>
+                            <td class="px-4 py-3 font-medium text-sipra-azul dark:text-white"> <a href="{{ route('projetos.show', $projeto) }}" class="hover:underline">{{ $projeto->nome }}</a> </td>
+                            
                             <td class="px-4 py-3">{{ $projeto->cliente?->nome ?? '—' }}</td>
                             <td class="px-4 py-3">{{ $projeto->responsavel?->name ?? '—' }}</td>
                             <td class="px-4 py-3 {{ $atrasado ? 'font-semibold text-red-600' : '' }}">

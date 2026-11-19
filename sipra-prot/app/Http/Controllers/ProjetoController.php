@@ -47,21 +47,21 @@ class ProjetoController extends Controller
 
     public function store(ProjetoRequest $request)
     {
-        Projeto::create($request->validated());
+        $projeto = Projeto::create($request->validated());
 
-        return redirect()->route('dashboard')->with('ok', 'Projeto criado.');
-    }
-
-    public function edit(Projeto $projeto)
-    {
-        return view('projetos.edit', ['projeto' => $projeto] + $this->opcoes());
+        return redirect()->route('projetos.show', $projeto)->with('ok', 'Projeto criado.');
     }
 
     public function update(ProjetoRequest $request, Projeto $projeto)
     {
         $projeto->update($request->validated());
 
-        return redirect()->route('dashboard')->with('ok', 'Projeto atualizado.');
+        return redirect()->route('projetos.show', $projeto)->with('ok', 'Projeto atualizado.');
+    }
+
+    public function edit(Projeto $projeto)
+    {
+        return view('projetos.edit', ['projeto' => $projeto] + $this->opcoes());
     }
 
     public function destroy(Projeto $projeto)
@@ -70,6 +70,35 @@ class ProjetoController extends Controller
 
         return redirect()->route('dashboard')->with('ok', 'Projeto excluído.');
     }
+
+    public function show(Projeto $projeto)
+    {
+        $projeto->load(['cliente', 'responsavel']);
+
+        return view('projetos.show', compact('projeto'));
+    }
+
+    public function levantamento(Projeto $projeto)
+    {
+        return $this->abaProvisoria($projeto, 'Levantamento de Medidas');
+    }
+
+    public function orcamento(Projeto $projeto)
+    {
+        return $this->abaProvisoria($projeto, 'Orçamento');
+    }
+
+    public function historico(Projeto $projeto)
+    {
+        return $this->abaProvisoria($projeto, 'Histórico');
+    }
+
+    private function abaProvisoria(Projeto $projeto, string $titulo)
+    {
+        $projeto->load(['cliente', 'responsavel']);
+
+        return view('projetos.aba-provisoria', compact('projeto', 'titulo'));
+    }   
 
     private function opcoes(): array
     {
