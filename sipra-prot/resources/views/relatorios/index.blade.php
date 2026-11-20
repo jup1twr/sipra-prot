@@ -26,8 +26,8 @@
     $relatorios = [
         ['orcamentos', 'Orçamentos por período', 'Valores e status das propostas emitidas', 'PDF', true],
         ['produtividade', 'Produtividade por responsável', 'Projetos, prazos e propostas por integrante', 'XLSX', true],
-        ['quantitativos', 'Quantitativos por projeto', 'Áreas e volumes validados no levantamento', 'PDF', false],
-        ['insumos', 'Consumo de insumos', 'Itens mais utilizados e variação de preço', 'XLSX', false],
+        ['quantitativos', 'Quantitativos por projeto', 'Áreas e volumes validados no levantamento', 'PDF', true],
+        ['insumos', 'Consumo de insumos', 'Itens mais utilizados e variação em relação ao orçado', 'XLSX', true],
     ];
 
     $selectClasse = 'rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-900';
